@@ -9,23 +9,13 @@ on:
       - main
 
 jobs:
-  pipeline_workflow:
+  main_job:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Echo Job Message
-        run: echo "Job pipeline_workflow is executing as part of new workflow"
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: pipeline_workflow
-    steps:
-      - name: Trigger Jenkins Deployment
-        env:
-          JENKINS_URL: ${{ secrets.JENKINS_URL }}
-          JENKINS_USER: ${{ secrets.JENKINS_USER }}
-          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
-          JOB_NAME: 'GitHub-Integration'
-        run: |
-          curl -X POST "$JENKINS_URL/job/$JOB_NAME/build" \
-            --user $JENKINS_USER:$JENKINS_TOKEN
+      - name: Print message
+        run: echo "TRIGGERED the main branch workflow - event based"
+      
+      - name: Use reusable workflow
+        uses: ./.github/workflows/reuseme.yml
+        with:
+          # Define any input variables if required by the reusable workflow
