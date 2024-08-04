@@ -21,7 +21,7 @@ jobs:
           JENKINS_URL: ${{ secrets.JENKINS_URL }}  # Ensure this is correctly set
           JENKINS_USER: ${{ secrets.JENKINS_USER }}
           JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
-          JOB_NAME: 'GitHub-Integration'
+          JOB_NAME: 'GitHub-Integration'  # Jenkins job name
         run: |
           echo "Triggering Jenkins job: $JOB_NAME"
           curl -X POST "$JENKINS_URL/job/$JOB_NAME/build" \
