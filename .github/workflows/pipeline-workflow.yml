@@ -17,5 +17,4 @@ jobs:
       
       - name: Use reusable workflow
         uses: ./.github/workflows/reuseme.yml
-        with:
-          # Define any input variables if required by the reusable workflow
+        # Remove the `with` block if no inputs are required by the reusable workflow
