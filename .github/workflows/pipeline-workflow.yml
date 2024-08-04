@@ -1,0 +1,17 @@
+name: CI Pipeline
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pipeline_workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Echo Job Message
+        run: echo "Job pipeline_workflow is executing as part of new workflow"
