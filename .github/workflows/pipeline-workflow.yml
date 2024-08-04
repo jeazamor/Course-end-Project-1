@@ -18,7 +18,7 @@ jobs:
       
       - name: Trigger Jenkins Job
         env:
-          JENKINS_URL: ${{ secrets.JENKINS_URL }}
+          JENKINS_URL: ${{ secrets.JENKINS_URL }}  # Ensure this is correctly set
           JENKINS_USER: ${{ secrets.JENKINS_USER }}
           JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
           JOB_NAME: 'GitHub-Integration'
