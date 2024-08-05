@@ -1,6 +1,6 @@
 name: CI Pipeline
 
-on: 
+on:
   push:
     branches:
       - main
@@ -9,21 +9,37 @@ on:
       - main
 
 jobs:
-  pipeline_workflow:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Echo Job Message
-        run: echo "Job pipeline_workflow is executing as part of new workflow"
-      
-      - name: Invoke Jenkins Deployment Job
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Trigger Jenkins Job
         env:
-          JENKINS_URL: ${{ secrets.JENKINS_URL }}  # Public URL of Jenkins
-          JENKINS_USER: ${{ secrets.JENKINS_USER }}
-          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
-          JOB_NAME: 'GitHub-Integration'
+          JENKINS_URL: ${{ secrets.JENKINS_URL }}       # The base URL of your Jenkins server
+          JENKINS_USER: ${{ secrets.JENKINS_USER }}     # Your Jenkins username
+          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}   # Your Jenkins API token
+          JOB_NAME: 'GitHub-Integration'                 # Replace with the name of your Jenkins job
         run: |
           echo "Triggering Jenkins job: $JOB_NAME"
           curl -X POST "$JENKINS_URL/job/$JOB_NAME/build" \
             --user $JENKINS_USER:$JENKINS_TOKEN \
             || { echo "Jenkins trigger failed"; exit 1; }
+
+      - name: Check Jenkins Job Status
+        env:
+          JENKINS_URL: ${{ secrets.JENKINS_URL }}
+          JENKINS_USER: ${{ secrets.JENKINS_USER }}
+          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
+          JOB_NAME: 'GitHub-Integration'
+        run: |
+          echo "Checking Jenkins job status: $JOB_NAME"
+          JOB_STATUS=$(curl -s -u $JENKINS_USER:$JENKINS_TOKEN "$JENKINS_URL/job/$JOB_NAME/lastBuild/api/json" | jq -r '.result')
+          if [ "$JOB_STATUS" == "SUCCESS" ]; then
+            echo "Jenkins job succeeded!"
+          else
+            echo "Jenkins job failed!"
+            exit 1
+          fi
