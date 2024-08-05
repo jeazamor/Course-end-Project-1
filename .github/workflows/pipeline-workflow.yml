@@ -16,7 +16,7 @@ jobs:
       - name: Echo Job Message
         run: echo "Job pipeline_workflow is executing as part of new workflow"
       
-      - name: Trigger Jenkins Job
+      - name: Invoke Jenkins Deployment Job
         env:
           JENKINS_URL: ${{ secrets.JENKINS_URL }}  # Public URL of Jenkins
           JENKINS_USER: ${{ secrets.JENKINS_USER }}
